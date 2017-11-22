@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head>
+    <script src="jstest.js"></script>
+    <script>
+        var a,b,c;
+    </script>
+</head>
+<body>
+    <script>
+        function addDays(days) {
+            var date = new Date();
+            date.setFullYear(2017);
+            date.setMonth(1);
+            date.setDate(1);
+            date.setHours(0);
+            date.setMinutes(0);
+            date.setSeconds(0);
+            date.setMilliseconds(0);
+            var time = date.getTime();
+            time += days* 86400000;
+            var newDate = new Date(time);
+            return newDate.getFullYear()+"-"+newDate.getMonth()+"-"+newDate.getDate();
+        }
+        var addTime = addDays(300);
+        alert(addTime);
+    </script>
+
+<input id="addpart1" onchange="set_value()">
+<input id="addpart2" onchange="set_value()">
+
+<button onclick="alert(c)"></button>
+</body>
+</html>
