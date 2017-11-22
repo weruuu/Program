@@ -18,5 +18,3 @@ function addDate(date, days) {
     var time = date.getFullYear() + "-" + month + "-" + day
     return time;
 }
-var addTime = addDate("2017-07-24", 2);
-console.log(addTime);
