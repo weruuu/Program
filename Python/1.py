@@ -1,24 +1,18 @@
 # -*- coding: utf-8 -*-
-import time, functools
+from bs4 import BeautifulSoup
+import requests
 
-def metric(fn):
-    print('%s executed in %s ms' % (fn.__name__, 10.24))
-    return fn
+url = 'https://movie.douban.com/j/search_subjects?type=movie&tag=%E7%83%AD%E9%97%A8&page_limit=50&page_start=0'
+wb_data = requests.get(url)
+Soup = BeautifulSoup(wb_data.text,'lxml')
+Titles = Soup.select('p')
+Score = Soup.select('li > span')
+print(Titles)
+#print(Score)
+li_name = []
+for title,score in zip(Titles,Score):
+    print(title.get_text())
 
-# 测试
-@metric
-def fast(x, y):
-    time.sleep(0.0012)
-    return x + y;
-
-@metric
-def slow(x, y, z):
-    time.sleep(0.1234)
-    return x * y * z;
-
-f = fast(11, 22)
-s = slow(11, 22, 33)
-if f != 33:
-    print('测试失败!')
-elif s != 7986:
-    print('测试失败!')
+# for i in li_name :
+#     if float(i[1]) >= 7.5:
+#         print(i)

@@ -1,15 +1,21 @@
-def createCounter():
-    n = 0
-    def counter():
-        n = n + 1
-        return n
-    return counter
+import time
+from functools import wraps
 
-# 测试:
-counterA = createCounter()
-print(counterA(), counterA(), counterA(), counterA(), counterA()) # 1 2 3 4 5
-counterB = createCounter()
-if [counterB(), counterB(), counterB(), counterB()] == [1, 2, 3, 4]:
-    print('测试通过!')
-else:
-    print('测试失败!')
+
+def fn_timer(function):
+    @wraps(function)
+    def function_timer(*args, **kwargs):
+        t0 = time.time()
+        result = function(*args, **kwargs)
+        t1 = time.time()
+        print("Total time running %s: %s seconds" %
+              (function.func_name, str(t1 - t0))
+              )
+        return result
+    return function_timer
+
+@fn_timer
+def qq():
+    return '111'
+
+print(qq())
