@@ -1,21 +1,21 @@
-import pymysql  
-  
-# 连接数据库  
-connect = pymysql.Connect(  
-    host='localhost',  
-    port=3306,  
-    user='Eviless',  
-    passwd='',  
-    db='mysql',  
-    charset='utf8'  
-)  
+import pymysql
 
-# 获取游标  
-cursor = connect.cursor()  
+# 连接数据库
+connect = pymysql.Connect(
+    host='localhost',
+    port=3306,
+    user='Eviless',
+    passwd='',
+    db='mysql',
+    charset='utf8'
+)
 
-# 查询数据  
-sql = "SELECT * FROM testtb "  
-cursor.execute(sql)  
+# 获取游标
+cursor = connect.cursor()
+
+# 查询数据
+sql = "SELECT * FROM testtb "
+cursor.execute(sql)
 for row in cursor.fetchall():  
     print(row)  
 print('共查找出', cursor.rowcount, '条数据')

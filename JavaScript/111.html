@@ -8,28 +8,22 @@
     </script>
 </head>
 <body>
-    <script>
-        function addDays(days) {
-            var date = new Date();
-            date.setFullYear(2017);
-            date.setMonth(1);
-            date.setDate(1);
-            date.setHours(0);
-            date.setMinutes(0);
-            date.setSeconds(0);
-            date.setMilliseconds(0);
-            var time = date.getTime();
-            time += days* 86400000;
-            var newDate = new Date(time);
-            return newDate.getFullYear()+"-"+newDate.getMonth()+"-"+newDate.getDate();
-        }
-        var addTime = addDays(300);
-        alert(addTime);
-    </script>
-
-<input id="addpart1" onchange="set_value()">
-<input id="addpart2" onchange="set_value()">
-
-<button onclick="alert(c)"></button>
+<script>
+    var i, args = [];
+    for (i=1; i<=100; i++) {
+        args.push(i);
+    }
+    if (sum() !== 0) {
+        console.log('测试失败: sum() = ' + sum());
+    } else if (sum(1) !== 1) {
+        console.log('测试失败: sum(1) = ' + sum(1));
+    } else if (sum(2, 3) !== 5) {
+        console.log('测试失败: sum(2, 3) = ' + sum(2, 3));
+    } else if (sum.apply(null, args) !== 5050) {
+        console.log('测试失败: sum(1, 2, 3, ..., 100) = ' + sum.apply(null, args));
+    } else {
+        console.log('测试通过!');
+    }
+</script>
 </body>
 </html>

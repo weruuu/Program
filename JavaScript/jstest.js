@@ -1,20 +1,12 @@
-function addDate(date, days) {
-    if(days == undefined || days == '') {
-        days = 1;
-    }
-    var date = new Date(date);
-    date.setDate(date.getDate() + days);
-    var month = date.getMonth() + 1;
-    var day = date.getDate();
-    var mm = "'" + month + "'";
-    var dd = "'" + day + "'";
-    //单位数前面加0
-    if(mm.length == 3) {
-        month = "0" + month;
-    }
-    if(dd.length == 3) {
-        day = "0" + day;
-    }
-    var time = date.getFullYear() + "-" + month + "-" + day
-    return time;
+'use strict';
+
+function sum(...rest) {
+   var s,i;
+   s=0;
+   for(i=0;i<rest.length;i++){
+      s=s+rest[i]
+   }
+   return s;
 }
+
+// 测试:

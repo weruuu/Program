@@ -1,18 +1,16 @@
-# -*- coding: utf-8 -*-
 from bs4 import BeautifulSoup
 import requests
+import json
 
-url = 'https://movie.douban.com/j/search_subjects?type=movie&tag=%E7%83%AD%E9%97%A8&page_limit=50&page_start=0'
-wb_data = requests.get(url)
-Soup = BeautifulSoup(wb_data.text,'lxml')
-Titles = Soup.select('p')
-Score = Soup.select('li > span')
-print(Titles)
-#print(Score)
-li_name = []
-for title,score in zip(Titles,Score):
-    print(title.get_text())
+headers = {
+    'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
+}
+url = 'https://movie.douban.com/j/search_subjects?type=movie&tag=热门&page_limit=100&page_start=0'
+web_data = requests.get(url,headers = headers)
+soup = BeautifulSoup(web_data.text,'lxml')
+title = soup.select('a.item > p')
 
-# for i in li_name :
-#     if float(i[1]) >= 7.5:
-#         print(i)
+datas = json.loads(web_data.text)
+results = list(datas.values())[0]
+for i in range(0,len(results)):
+    print(results[i]['title'],results[i]['rate'])
