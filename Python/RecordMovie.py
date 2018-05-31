@@ -2,7 +2,9 @@ import pymysql
 from bs4 import BeautifulSoup
 import requests
 import json
+import time
 result = []
+current_date = time.strftime("%Y%m%d", time.localtime())
 # 连接数据库
 connect = pymysql.Connect(
     host='localhost',
@@ -22,19 +24,16 @@ soup = BeautifulSoup(web_data.text,'lxml')
 title = soup.select('p')
 datas = json.loads(web_data.text)
 results = list(datas.values())[0]
-
-sql = "truncate table mysql.movie"
+'''
+sql = 'truncate table mysql.movie'
 cursor.execute(sql)
-connect.commit()
-for i in range(0,len(results)):
-    #result.pop(,)
+connect.commit()'''
+
 # 插入数据
-    sql = "insert into mysql.movie values('"+results[i]['title']+"','"+results[i]['rate']+"','20171229')"
+for i in range(0,len(results)):
+    sql = "insert into mysql.movie values('"+results[i]['title']+"','"+results[i]['rate']+"','"+current_date+"')"
     cursor.execute(sql)
     connect.commit()
-
-
-
 print('写入完成')
 
 # 关闭连接

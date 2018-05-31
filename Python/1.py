@@ -1,16 +1,19 @@
-from bs4 import BeautifulSoup
-import requests
-import json
+from multiprocessing import Pool
+import os, time, random
 
-headers = {
-    'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
-}
-url = 'https://movie.douban.com/j/search_subjects?type=movie&tag=热门&page_limit=100&page_start=0'
-web_data = requests.get(url,headers = headers)
-soup = BeautifulSoup(web_data.text,'lxml')
-title = soup.select('a.item > p')
+def long_time_task(name):
+    print('Run task %s (%s)...' % (name, os.getpid()))
+    start = time.time()
+    time.sleep(random.random() * 3)
+    end = time.time()
+    print('Task %s runs %0.2f seconds.' % (name, (end - start)))
 
-datas = json.loads(web_data.text)
-results = list(datas.values())[0]
-for i in range(0,len(results)):
-    print(results[i]['title'],results[i]['rate'])
+if __name__=='__main__':
+    print('Parent process %s.' % os.getpid())
+    p = Pool(20)
+    for i in range(21):
+        p.apply_async(long_time_task, args=(i,))
+    print('Waiting for all subprocesses done...')
+    p.close()
+    p.join()
+    print('All subprocesses done.')

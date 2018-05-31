@@ -1,18 +1,15 @@
-s=[[1,2,3,4],[2,3,4,5],[4,5,6,7],[5,6,7,8]]
-def check_row():
-    for x in range(len(s)):
-        for y in range(len(s)):
-            val = s[x][y]
-            for z in range(y+1,len(s)):
-                if val == s[x][z]:
-                    return False
-    return True
-def check_col():
-    for y in range(len(s)):
-        for x in range(len(s)):
-            val = s[x][y]
-            for z in range(x+1,len(s)):
-                if val == s[z][y]:
-                    return False
-    return True
-print(check_row(),check_col())
+# import json
+# from collections import defaultdict
+# from collections import Counter
+# def get_counts2(sequence):
+#     counts = defaultdict(int)
+#     for x in sequence:
+#         counts[x] += 1
+#     return counts
+# path = '/Users/eviless/Downloads/pydata-book-2nd-edition/datasets/bitly_usagov/example.txt'
+# records = [json.loads(line) for line in open(path)]
+# timezone = [rec['tz'] for rec in records if 'tz' in rec]
+# counts = Counter(timezone)
+# counts.most_common(10)
+
+from pandas import DataFrame
