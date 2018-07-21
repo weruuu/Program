@@ -1,19 +1,42 @@
-from multiprocessing import Pool
-import os, time, random
+from bs4 import BeautifulSoup
+import requests
+import pymysql
+import datetime
 
-def long_time_task(name):
-    print('Run task %s (%s)...' % (name, os.getpid()))
-    start = time.time()
-    time.sleep(random.random() * 3)
-    end = time.time()
-    print('Task %s runs %0.2f seconds.' % (name, (end - start)))
+nowTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
+nowHour = datetime.datetime.now().strftime('%H')
+connect = pymysql.Connect(
+    host='118.126.90.21',
+    port=3306,
+    user='BI',
+    passwd='Sap123456',
+    db='mysql',
+    charset='utf8'
+)
+# 获取游标
+cursor = connect.cursor()
 
-if __name__=='__main__':
-    print('Parent process %s.' % os.getpid())
-    p = Pool(20)
-    for i in range(21):
-        p.apply_async(long_time_task, args=(i,))
-    print('Waiting for all subprocesses done...')
-    p.close()
-    p.join()
-    print('All subprocesses done.')
+headers = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36'}
+url = 'https://n.cbg.163.com/?serverid=9&order=unit_price+ASC'
+web_data = requests.get(url,headers=headers)
+soup = BeautifulSoup(web_data.text,'lxml')
+title = soup.findAll('td',class_='c_Red')
+qty = soup.select('td > p')
+a = []
+b = []
+result = []
+for i in title:
+    a.append(i.get_text().replace('\n',''))
+for q in qty:
+    b.append(q.get_text().replace('\n',''))
+a1 = [i.replace('元/万文','') for i in a if a.index(i)%2==1]
+a2 = [i for i in a if a.index(i)%2==0]
+for i,j,q in zip(a1,a2,qty):
+    result.append([float(i),float(j),int(q.get_text().replace('万',''))])
+
+for elem in result:
+    sql = "insert into mysql.nsh_money values('"+nowTime+"',"+str(elem[0])+","+str(elem[1])+")"
+    cursor.execute(sql)
+    connect.commit()
+print('写入完成',nowTime)
