@@ -48,7 +48,6 @@ class Application(Frame):
         self.nameInputmodel.pack()
         self.alertButton = Button(self, text='Analytic', command=self.run)
         self.alertButton.pack()
-
     #定义连接
     def connect(self):
         try:

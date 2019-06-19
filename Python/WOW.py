@@ -17,4 +17,4 @@ datas = json.loads(web_data.text)
 #soup = BeautifulSoup(web_data.text,'lxml')
 
 for i in datas:
-    print(i)
+    print(i['owner'],i['buyout']/10000,i['quantity'],i['timeLeft'])
