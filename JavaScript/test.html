@@ -1,28 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE  HTML>
+<html >
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>数组</title>
+<script type="text/javascript">
+ //创建数组
+var arr = ['*','##',"***","&&","****","##*"];
+arr = ["*","**","***","****"];
+
+ //将数组内容输出，完成达到的效果。
+for(var i = 0;i<arr.length;i++){
+    document.write(arr[i]);
+    document.write("<br/>");
+}
+
+
+</script>
 </head>
 <body>
-<script>
-    function addDays(days) {
-        var date = new Date();
-        date.setFullYear(2011);
-        date.setMonth(0);
-        date.setDate(1);
-        date.setHours(0);
-        date.setMinutes(0);
-        date.setSeconds(0);
-        date.setMilliseconds(0);
-        var time = date.getTime();
-        time += days*86400000;
-        //var newDate = new Date(time);
-        return new Date(time);
-    }
-    var aa = addDays(100);
-    alert(aa);
-</script>
-
 </body>
 </html>

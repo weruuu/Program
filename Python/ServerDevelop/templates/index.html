@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>echarts</title>
+</head>
+
+<body>
+    <div id="container"></div>
+    <div id="info">数据展示：</div>
+    <table align="center" border="1" id = "testTable" style="width: 30%;text-align: center">
+  <tr>
+    <td>当前所有账号</td>
+  </tr>
+</table>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.js"></script>
+	<script>
+
+        $.getJSON('/search_data'
+                , function(data) {                    // 从Flask返回的数据
+                for(i=1;i<=Object.keys(data).length;i++){
+                    console.log(data[i].ID)
+                    var newTr = testTable.insertRow();
+                    var newTd0 = newTr.insertCell();
+                    newTd0.innerText= data[i].ID;
+                    }
+            }
+          )
+	</script>
+
+</body>
+
+</html>

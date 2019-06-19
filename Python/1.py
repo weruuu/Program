@@ -1,19 +1,27 @@
-from multiprocessing import Pool
-import os, time, random
+from flask import Flask, request, render_template
 
-def long_time_task(name):
-    print('Run task %s (%s)...' % (name, os.getpid()))
-    start = time.time()
-    time.sleep(random.random() * 3)
-    end = time.time()
-    print('Task %s runs %0.2f seconds.' % (name, (end - start)))
+app = Flask(__name__)
 
-if __name__=='__main__':
-    print('Parent process %s.' % os.getpid())
-    p = Pool(20)
-    for i in range(21):
-        p.apply_async(long_time_task, args=(i,))
-    print('Waiting for all subprocesses done...')
-    p.close()
-    p.join()
-    print('All subprocesses done.')
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    return render_template('home.html')
+
+@app.route('/signin', methods=['GET'])
+def signin_form():
+    return render_template('form.html')
+
+@app.route('/signin', methods=['POST'])
+def signin():
+    requestJsonString = request.form.dict()
+    requestDict = eval(requestJsonString.keys()[0])
+    username = requestDict.get('username')
+    password = requestDict.get('password')
+    print(username,password)
+    # username = request.form['username']
+    # password = request.form['password']
+    # if username=='admin' and password=='password':
+    #     return render_template('./ServerDevelop/signinok.html', username=username)
+    return render_template('form.html', message='Bad username or password', username=username)
+
+if __name__ == '__main__':
+    app.run()
