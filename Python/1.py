@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from flask import Flask, request, render_template
 
 app = Flask(__name__)
@@ -25,3 +26,6 @@ def signin():
 
 if __name__ == '__main__':
     app.run()
+=======
+111
+>>>>>>> e503aa12f5133023491d968e7d827e2c2758a696
