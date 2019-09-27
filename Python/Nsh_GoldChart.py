@@ -7,10 +7,10 @@ import xlwt
 nowTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 nowHour = datetime.datetime.now().strftime('%H')
 connect = pymysql.Connect(
-    host='118.126.90.21',
+    host='localhost',
     port=3306,
-    user='BI',
-    passwd='Sap123456',
+    user='root',
+    passwd='demo1029',
     db='mysql',
     charset='utf8'
 )
