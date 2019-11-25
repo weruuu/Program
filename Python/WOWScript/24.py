@@ -40,5 +40,5 @@ while (1) :
     time.sleep(0.5)
     win32api.PostMessage(hwnd, win32con.WM_KEYDOWN, 0x34, 0)
     win32api.PostMessage(hwnd, win32con.WM_KEYUP,0x34, 0)
-    time.sleep(1)
+    time.sleep(0.5)
 

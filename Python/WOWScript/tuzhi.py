@@ -14,13 +14,12 @@ for h, t in hwnd_title.items():
 # send key
 print(hwnd)
 while (1) :
-    # win32api.PostMessage(hwnd, win32con.WM_KEYDOWN, 0xBD, 0)
-    # win32api.PostMessage(hwnd, win32con.WM_KEYUP,0xBD, 0)
-    # time.sleep(18)
-    win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0)
-    win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0)
-    time.sleep(1)
-    # win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0)
-    # win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0)
-    # time.sleep(1)
-
+    win32api.PostMessage(hwnd, win32con.WM_KEYDOWN, 0x37, 0)
+    win32api.PostMessage(hwnd, win32con.WM_KEYUP,0x37, 0)
+    time.sleep(0.1)
+    win32api.PostMessage(hwnd, win32con.WM_KEYDOWN, 0x38, 0)
+    win32api.PostMessage(hwnd, win32con.WM_KEYUP,0x38, 0)
+    time.sleep(0.3)
+    win32api.PostMessage(hwnd, win32con.WM_KEYDOWN, 0x1B, 0)
+    win32api.PostMessage(hwnd, win32con.WM_KEYUP,0x1B, 0)
+    time.sleep(0.3)
