@@ -1,7 +1,6 @@
 #子集遍历
 a= input()
-maxl = []
-max = 0
+maxl,max = '',0
 for i in range(len(a)):
     for j in range(i,len(a)):
         flag = 0

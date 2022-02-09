@@ -1,5 +1,5 @@
 #单循环
-a= input()
+a= '1234s56fad'#input()
 index,flag = -1,0
 anow,amax = [],[]
 for i in a:
@@ -18,6 +18,4 @@ for i in a:
         index = anow.index(i)
     if (len(amax) == 1 and amax[0].isdigit() == False) or flag == 0:
         amax = []
-    if len(amax) > len(a[a.find(i):]):
-        break
 print(amax)
