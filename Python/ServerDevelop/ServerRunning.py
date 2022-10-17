@@ -6,7 +6,7 @@ import json
 connect = pymysql.Connect(
     host='localhost',
     port=3306,
-    user='Eviless',
+    user='root',
     passwd='demo1029',
     db='mysql',
     charset='utf8'
@@ -33,7 +33,6 @@ def signin():
     sql = "select password from web_user where userid = '" + username + "'"
     cursor.execute(sql)
     s_password = cursor.fetchone()[0]
-    print(s_password)
     if s_password != '' and password == s_password:
         return render_template('signok.html', username=username)
     return render_template('form.html', message='Bad username or password', username=username)
@@ -68,6 +67,7 @@ def test_post():
         ele_pw = i[1]
         testInfo[row_id] = {"ID":ele_id,"PASSWORD":ele_pw}
         row_id = row_id + 1
+    print(testInfo)
     return json.dumps(testInfo)
 
 @app.route('/index')

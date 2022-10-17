@@ -1,0 +1,23 @@
+<html>
+<head>
+  <title>体重大作战</title>
+    <meta charset="UTF-8">
+
+</head>
+
+<body>
+<!--  {% if message %}-->
+<!--  <p style="color:red">{{ message }}</p>-->
+<!--  {% endif %}-->
+  <form action="/data_log" method="post">
+    <legend>Log your weight:</legend>
+    <p> username:<select name = "username" value = "{{ username }}">
+      <option value ="Nancy">Nancy</option>
+      <option value ="SXA">SXA</option></select>
+    </p>
+    <p>weight:<input name="Weight" placeholder="Weight" value="{{ Weight }}"></p>
+    <p><button type="submit">Submit</button></p>
+  </form>
+  <a href="echart"> 查询 </a>
+</body>
+</html>

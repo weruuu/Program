@@ -1,0 +1,124 @@
+﻿<html>
+<head>
+  <title>减肥大作战</title>
+    <script src= "echarts.js"></script>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.js"></script>
+
+</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+<body>
+<!--  {% if message %}-->
+<!--  <p style="color:red">{{ message }}</p>-->
+<!--  {% endif %}-->
+<!--    <legend>数据上传成功！感谢使用！</legend>-->
+
+    <p id="result" style="color: red;font-size: 30px"></p>
+
+    <div id="main" style="width: 600px;height:400px;"></div>
+
+
+<!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+
+    <script>
+        // console.log(location.pathname)
+      // 基于准备好的dom，初始化echarts实例
+        var log_date = new Array()
+        var Nweight = new Array()
+        var Sweight = new Array()
+        loaddata()
+        $.ajaxSettings.async = true;
+        function loaddata(){
+            $.ajaxSettings.async = false;
+            $.getJSON('/search_data',function (data) {                    // 从Flask返回的数据
+                for (i = 1; i <= Object.keys(data).length; i++) {
+                Nweight.push(data[i].Nweight)
+                Sweight.push(data[i].Sweight)
+                log_date.push(data[i].date.replace('\\n', ''))
+                }
+                $.ajaxSettings.async = true;
+                console.log(1,Nweight,Sweight,log_date)
+                })
+            }
+        // Nweight = [60,50,55,]
+        // Sweight = [70,80,75,68]
+        // log_date = ['2022-01-01','2022-01-02','2022-01-03','2022-01-04']
+        var Nx = (Nweight[0]-Nweight.filter(x => x != '').slice(-1)[0])
+        var Sx = (Sweight[0]-Sweight.filter(x => x != '').slice(-1)[0])
+        console.log(Nweight[0],Nweight.filter(x => x != '').slice(-1)[0],Sweight[0],Sweight.filter(x => x != '').slice(-1)[0],Nx.toFixed(2),Sx,Math.round((Sx-Nx),2))
+        if(Nx>Sx){document.getElementById('result').innerHTML = '小老师输给大妈'+((Nx-Sx)*200).toFixed(2)+'块！！！';}
+        else{document.getElementById('result').innerHTML = '大妈输给小老师'+((Sx-Nx)*200).toFixed(0)+'块！！！';}
+        function getSplitIntervalMax(data){
+          let max = Math.ceil(Math.max(...data) / 1)  * 1;
+          if(max===0){max=100}
+          return max
+        }
+        let y1max = getSplitIntervalMax(Nweight)
+        let y1min = Math.ceil(Math.min(Nweight.filter(x => x != '').slice(-1)[0])/1)*1-1
+        let y2max = getSplitIntervalMax(Sweight)
+        let y2min = Math.ceil(Math.min(Sweight.filter(x => x != '').slice(-1)[0])/1)*1-1
+        let diff = y2max - y2min
+        if((y1max-y1min) > (y2max-y2min)){diff = y1max - y1min}
+      var myChart = echarts.init(document.getElementById('main'));
+      // 指定图表的配置项和数据
+      var option = {
+        title: {
+          text: '减肥大作战'
+        },
+        tooltip: {},
+        legend: {
+          data: ['Nancy','SXA']
+        },
+        xAxis: {
+          data: log_date
+        },
+        yAxis: [{   min:y1max - diff - 1,
+                    max:y1max,
+                    axisLabel : {   //调整左侧Y轴刻度， 直接按对应数据显示
+                    show:true,
+                    scale:true}
+                },
+                {   min:y2max - diff - 1,
+                    max:y2max,
+                    axisLabel : {   //调整左侧Y轴刻度， 直接按对应数据显示
+                    show:true,
+                    scale:true}
+                }
+                ],
+        series: [
+          {
+            name: 'Nancy',
+            type: 'line',
+            smooth: true,
+            yAxisIndex: 0,
+            data: Nweight
+          },
+            {
+            name: 'SXA',
+            type: 'line',
+            smooth: true,
+            yAxisIndex: 1,
+            data: Sweight
+            }
+        ]
+      };
+
+      // 使用刚指定的配置项和数据显示图表。
+      myChart.setOption(option);
+
+    </script>
+      <form id="submitdata" action="/data_log" method="post">
+        <legend>Log your weight:</legend>
+        <p> username:<select name = "username" value = "{{ username }}">
+          <option value ="Nancy">Nancy</option>
+          <option value ="SXA">SXA</option></select>
+        </p>
+<!--        <select id="logdate"></select>-->
+        <p>weight:<input name="Weight" placeholder="Weight" value="{{ Weight }}"></p>
+        <p><button type="submit">Submit</button></p>
+      </form>
+</body>
+</html>
