@@ -3,6 +3,7 @@ import cv2
 import pyscreenshot as ImageGrab
 import numpy as np
 import autopy
+import pyautogui
 from matplotlib import pyplot as plt
 
 import pyaudio
@@ -24,7 +25,7 @@ screen_end_point = None
 
 def check_process():
 	print('Checking WoW is running')
-	wow_process_names = ["WeChat.exe"]
+	wow_process_names = ["pycharm64.exe"]
 	running = False
 	for pid in psutil.pids():
 		p = psutil.Process(pid)
@@ -42,20 +43,21 @@ def check_process():
 def check_screen_size():
 	print("Checking screen size")
 	img = ImageGrab.grab()
-	# img.save('temp.png')
+	# img.save('./temp.png')
 	global screen_size
 	global screen_start_point
 	global screen_end_point
 
-	screen_size = (img.size[0] / 2, img.size[1] / 2)
-	screen_start_point = (screen_size[0] * 0.35, screen_size[1] * 0.35)
-	screen_end_point = (screen_size[0] * 0.65, screen_size[1] * 0.65)
+	# screen_size = (img.size[0] / 2, img.size[1] / 2)
+	screen_size = [img.size[0], img.size[1]]
+	screen_start_point = [0,0]
+	screen_end_point = [screen_size[0], screen_size[1]]
 	print ("Screen size is " + str(screen_size))
 
 
 def send_float():
 	print('Sending float')
-	autopy.key.tap(u'1')
+	# autopy.key.tap(u'1') #输入1
 	print('Float is sent, waiting animation')
 	time.sleep(2)
 
@@ -67,40 +69,47 @@ def jump():
 def make_screenshot():
 	print('Capturing screen')
 	print(screen_start_point)
-	screenshot = ImageGrab.grab(bbox=(screen_start_point[0], screen_start_point[1], screen_end_point[0], screen_end_point[1])) # (0, 710, 410, 1010)
+	print(screen_start_point[0], screen_start_point[1], screen_end_point[0], screen_end_point[1])
+	screenshot = ImageGrab.grab(bbox=(int(screen_start_point[0]), int(screen_start_point[1]), int(screen_end_point[0]), int(screen_end_point[1]))) # (0, 710, 410, 1010)
+	# screenshot = ImageGrab.grab(bbox=(1,1,2,2)) # (0, 710, 410, 1010)
+
 	if dev:
-		screenshot_name = 'var/fishing_session_' + str(int(time.time())) + '.png'
+		screenshot_name = './var/fishing_session_' + str(int(time.time())) + '.png'
 	else:
-		screenshot_name = 'var/fishing_session.png'
+		screenshot_name = './var/fishing_session.png'
 	screenshot.save(screenshot_name)
 	return screenshot_name
 
 def find_float(img_name):
-	print('Looking for float')
+	print('Looking for float',img_name)
 	# todo: maybe make some universal float without background?
 	for x in range(0, 7):
-		template = cv2.imread('var/fishing_float_' + str(x) + '.png', 0)
+		# template = cv2.imread('./var/fishing_float_' + str(x) + '.png', 0)
+		template = cv2.imread('./var/fishing_float_0.png', 0)
 
 		img_rgb = cv2.imread(img_name)
 		img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
 		# print('got images')
-		w, h = template.shape[::-1]
+		w, h = template.shape[:2]
 		res = cv2.matchTemplate(img_gray,template,cv2.TM_CCOEFF_NORMED)
-		threshold = 0.6
+		threshold = 0.9
 		loc = np.where( res >= threshold)
 		for pt in zip(*loc[::-1]):
-		    cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0,0,255), 2)
+			bottom_right = (pt[0] + w, pt[1] + h)
+		    # cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0,0,255), 2)
+			cv2.rectangle(img_rgb, pt, bottom_right, (0, 0, 255), 2)
 		if loc[0].any():
 			print('Found ' + str(x) + ' float')
 			if dev:
-				cv2.imwrite('var/fishing_session_' + str(int(time.time())) + '_success.png', img_rgb)
-			return (loc[1][0] + w / 2) / 2, (loc[0][0] + h / 2) / 2
+				cv2.imwrite('./var/fishing_session_' + str(int(time.time())) + '_success.png', img_rgb)
+			return loc[1][0] + 4, loc[0][0] + 4
 
 
 def move_mouse(place):
 	x,y = place[0], place[1]
 	print("Moving cursor to " + str(place))
-	autopy.mouse.smooth_move(int(screen_start_point[0]) + x , int(screen_start_point[1]) + y)
+	# autopy.mouse.smooth_move(int(screen_start_point[0]) + x , int(screen_start_point[1]) + y)
+	pyautogui.moveTo(int(screen_start_point[0]) + x , int(screen_start_point[1]) + y)
 
 def listen():
 	print('Well, now we are listening for loud sounds...')
@@ -123,7 +132,7 @@ def listen():
 	                frames_per_buffer=CHUNK)
 	cur_data = ''  # current chunk  of audio data
 	rel = RATE/CHUNK
-	slid_win = deque(maxlen=SILENCE_LIMIT * rel)
+	slid_win = deque(maxlen=int(SILENCE_LIMIT * rel))
 
 
 	success = False
@@ -149,17 +158,17 @@ def listen():
 
 def snatch():
 	print('Snatching!')
-	autopy.mouse.click(autopy.mouse.RIGHT_BUTTON)
+	autopy.mouse.click(autopy.mouse.Button.RIGHT)
 
 def logout():
-	autopy.key.tap(int(autopy.key.K_RETURN))
+	autopy.key.tap(autopy.key.Code.RETURN)
 	time.sleep(0.1)
 	for c in u'/logout':
 		time.sleep(0.1)
 		autopy.key.tap(c)
 	time.sleep(0.1)
 
-	autopy.key.tap(int(autopy.key.K_RETURN))
+	autopy.key.tap(autopy.key.Code.RETURN)
 
 def main():
 	if check_process() and not dev:
