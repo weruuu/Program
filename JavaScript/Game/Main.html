@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>Title</title>
+    <script src="Charator.js"></script>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.js"></script>
+</head>
+<body>
+    <div id="Map" style="border:1px solid #000000">
+        <table style="width: 100%">
+            <tr>
+                <td style="width: 25%"><div id="lastmap" onclick="Lastmap">last map</div></td>
+                <td id="map0-1" style="width: 25%"></td>
+                <td id="map0-2" style="width: 25%"></td>
+                <td id="map0-3" style="width: 25%"></td>
+            </tr>
+            <tr>
+                <td id="map0-4" style="width: 25%"></td>
+                <td id="map0-5" style="width: 25%"></td>
+                <td id="map0-6" style="width: 25%"></td>
+                <td id="nextmap" style="width: 25%"><div onclick="nextmap">next map</div></td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="height: 2px"></div> <!--留白-->
+
+    <div id="Status" style="height: 166px">
+        <div id="charator style" style="width: 30%; border:1px solid #000000;float: left">
+            <p >ID：<span id="ID" style="color: #0f0f0f"></span></p>
+            <p >MP：<span id="HP" style="color: #ac2925"></span></p>
+            <p >HP：<span id="MP" style="color: #1c9eff"></span></p>
+            <p >Storage：<span id="Storage" style="color: #0f0f0f"></span></p>
+        </div>
+        <div id="Message" style="height: 164px; border:1px solid #000000;margin-left: 32%">
+
+        </div>
+    </div>
+
+    <div style="height: 2px"></div> <!--留白-->
+
+    <div id="Monster" style="border:1px solid #000000;">
+        <table style="width: 100%">
+            <tr>
+                <td style="width: 25%">1</td>
+                <td style="width: 25%">2</td>
+                <td style="width: 25%">3</td>
+                <td style="width: 25%">4</td>
+            </tr>
+            <tr>
+                <td style="width: 25%">5</td>
+                <td style="width: 25%">6</td>
+                <td style="width: 25%">7</td>
+                <td style="width: 25%">8</td>
+            </tr>
+        </table>
+    </div>
+<script>Init()</script>
+
+</body>
+</html>
